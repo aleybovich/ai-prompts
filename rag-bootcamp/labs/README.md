@@ -47,9 +47,11 @@ itself. You rarely touch `ragkit.py`, but it is short and worth reading.
 By default the labs use **sentence-transformers** (the industry-standard local
 embedding library, built on PyTorch) with the small `BAAI/bge-small-en-v1.5`
 model (~130 MB, downloaded once, runs fine on CPU / Apple Silicon). No
-configuration needed. If you are very tight on disk, `pip install fastembed` and
-the labs will use it instead (it is torch-free and lighter). To try a stronger
-model: `export RAGKIT_EMBED_MODEL=BAAI/bge-base-en-v1.5`.
+configuration needed. If you are very tight on disk, use **fastembed** *instead
+of* sentence-transformers (it is torch-free and much lighter): comment out the
+`sentence-transformers` line in `requirements.txt`, run `pip install fastembed`,
+and the labs will use it. (If both are installed, sentence-transformers takes
+precedence.) To try a stronger model: `export RAGKIT_EMBED_MODEL=BAAI/bge-base-en-v1.5`.
 
 ### The LLM (generating answers)
 

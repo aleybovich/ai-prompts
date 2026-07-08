@@ -46,7 +46,10 @@ def rrf(rankings, k=60):
 
 
 # --- Build the two retrievers ---------------------------------------------
-chunks = ragkit.chunk_corpus()
+# Smaller chunks here so the rate-limit/429 section becomes its OWN chunk (rather
+# than being folded into the API intro), which makes the gold chunk and the
+# rank movement meaningful.
+chunks = ragkit.chunk_corpus(size=500, overlap=75)
 texts = [c["text"] for c in chunks]
 
 embedder = ragkit.get_embedder()

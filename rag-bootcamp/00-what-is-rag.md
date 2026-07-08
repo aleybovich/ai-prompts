@@ -78,8 +78,15 @@ python lab00_hallucination.py
 
 Even with **no LLM installed**, the lab runs: it prints the exact prompt each
 approach would send, so you can *see* that RAG's prompt contains the real answer
-while the plain prompt does not. Install Ollama (see `labs/README.md`) to watch
-a real model get it wrong, then right.
+(the "$8/month" passage) while the plain prompt does not. Install Ollama (see
+`labs/README.md`) to watch a real model get it wrong, then right.
+
+> **Offline note.** Without the embedding model installed (or with
+> `RAGKIT_OFFLINE=1`), retrieval uses a lexical stand-in that matches shared
+> *words*, not meaning — so it is fuzzier and the exact ranking differs from what
+> the real model produces. Install `sentence-transformers` (in
+> `labs/requirements.txt`) for real semantic retrieval. Every lesson from here on
+> repeats this caveat where it matters.
 
 Key thing to notice: RAG did not change the *model*. It changed the *prompt* —
 by finding and inserting the right context. RAG is a retrieval problem wearing a

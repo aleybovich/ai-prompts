@@ -179,7 +179,7 @@ offline mode. The short version:
 cd labs
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-python lab01_embeddings.py
+python lab00_hallucination.py     # then lab01_embeddings.py, lab02_..., through lab09
 ```
 
 ## A note on honesty

@@ -240,8 +240,8 @@ class MockLLM:
 class OllamaLLM:
     """
     Free, local generation via Ollama (https://ollama.com). Run once:
-        ollama pull llama3.2      # or qwen2.5:3b, gemma3, etc.
-    Then Ollama serves an OpenAI-free HTTP API on http://localhost:11434.
+        ollama pull gemma3:1b      # or gemma3:270m, llama3.2:1b, qwen2.5:1.5b
+    Then Ollama serves a simple local HTTP API on http://localhost:11434.
     """
 
     def __init__(self, model: str | None = None, host: str | None = None):
@@ -430,7 +430,13 @@ def chunk_document(text: str, size: int = 1200, overlap: int = 180) -> list[str]
     Recursive-character chunking: split on the largest natural boundary that
     keeps pieces under `size` (paragraphs -> lines -> sentences -> words), then
     add `overlap` characters from the previous chunk. Sizes are in characters
-    (~4 chars per token). This mirrors lab02's recursive_chunks.
+    (~4 chars per token). Uses the same recursive algorithm as lab02's
+    recursive_chunks.
+
+    The default size (1200 chars ~= 300 tokens) is intentionally SMALLER than
+    Lesson 2's general ~1600-2000 char (~400-512 token) recommendation, because
+    the sample-corpus documents are short and we want each to split into a few
+    chunks for the demos. On real documents, prefer the larger size.
     """
     separators = ["\n\n", "\n", ". ", " "]
 
@@ -526,4 +532,7 @@ if __name__ == "__main__":
     print("embedding matrix shape:", m.shape)
     print("cat vs kitten :", round(cosine_sim(m[0], m[1]), 3))
     print("cat vs quantum:", round(cosine_sim(m[0], m[2]), 3))
+    if "offline" in emb.model_name:
+        print("(offline lexical stand-in — numbers near 0 are expected; install "
+              "sentence-transformers for meaningful semantic similarity)")
     print("llm backend   :", get_llm().name)

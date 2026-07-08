@@ -125,6 +125,13 @@ each chunk's context blurb with your local LLM if one is available, and falls
 back to a deterministic template (document title + section) otherwise, so it runs
 and measures either way.
 
+> **Offline note.** With the lexical stand-in and the fixed title template, the
+> measured delta on this tiny corpus can be zero or even slightly *negative* — a
+> uniform template adds the same words to every chunk without adding real
+> meaning. The gain appears with the LLM writing a specific per-chunk blurb and a
+> real semantic embedder, on a corpus large enough not to saturate. The lab
+> prints this caveat too.
+
 ```bash
 cd labs && source .venv/bin/activate
 python lab08_contextual.py

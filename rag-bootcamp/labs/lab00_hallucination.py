@@ -29,8 +29,11 @@ embedder = ragkit.get_embedder()
 chunk_vecs = embedder.encode([c["text"] for c in chunks])
 
 # --- Retrieval: embed the question, find the most similar chunks. ---
+# (Offline, the lexical stand-in is fuzzy, so we take the top 5 to be sure the
+#  answer paragraph is included. The real embedder ranks it higher; Lesson 4
+#  discusses choosing top-k.)
 q_vec = embedder.encode([QUESTION])[0]
-hits = ragkit.top_k(q_vec, chunk_vecs, k=3)
+hits = ragkit.top_k(q_vec, chunk_vecs, k=5)
 retrieved = [chunks[i] for i, _ in hits]
 
 context = "\n\n".join(f"[{c['source']}] {c['text']}" for c in retrieved)
