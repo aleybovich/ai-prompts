@@ -104,7 +104,13 @@ python lab02_chunking.py
 ```
 
 Writing the splitters by hand (they are ~15 lines each) demystifies what
-frameworks do for you later.
+frameworks do for you later. The lab also loads a small **PDF** with `pypdf` to
+show that real files become text before chunking.
+
+> **Offline note.** The final chunk-vs-document comparison ranks by the embedding
+> model. Offline (with `RAGKIT_OFFLINE=1`) it uses the lexical stand-in, so which
+> chunk "wins" is fuzzier than with the real model — the point being made (a
+> chunk is far shorter and more targeted than a whole document) holds either way.
 
 ## Key takeaways
 

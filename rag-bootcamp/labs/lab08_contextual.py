@@ -27,7 +27,7 @@ import numpy as np
 
 import ragkit
 
-K = 5
+K = 3   # small corpus: k=5 saturates doc-level metrics (see Lesson 7)
 HERE = os.path.dirname(os.path.abspath(__file__))
 with open(os.path.join(HERE, "data", "eval.json")) as f:
     eval_set = json.load(f)

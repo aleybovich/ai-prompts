@@ -55,8 +55,9 @@ precedence.) To try a stronger model: `export RAGKIT_EMBED_MODEL=BAAI/bge-base-e
 
 ### The LLM (generating answers)
 
-Retrieval-only labs (Lessons 1–5) need **no LLM at all**. The labs that generate
-answers (Lessons 6–9) will use, in order of preference:
+Labs 1–3 and 5 need **no LLM at all**. Labs 0, 4, and 6–9 generate answers (or
+use an LLM opportunistically) and will use, in order of preference — falling back
+to the MockLLM if none is available, so they always run:
 
 1. **Ollama** — free, local. This is the recommended option. Install it from
    <https://ollama.com>, then pull a small model that fits a modest laptop:
@@ -110,4 +111,5 @@ every lab runs end to end with zero downloads.
 - `requirements.txt` — free, local dependencies.
 - `data/corpus/*.md` — the sample knowledge base (the "Nimbus Notes" docs).
 - `data/eval.json` — evaluation questions with ground-truth answers.
-- `lab01_...` through `lab09_...` — one script per lesson.
+- `data/sample.pdf` — a tiny PDF the chunking lab loads with `pypdf`.
+- `lab00_hallucination.py` through `lab09_capstone.py` — one script per lesson.

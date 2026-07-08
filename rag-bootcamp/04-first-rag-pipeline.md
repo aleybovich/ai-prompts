@@ -98,9 +98,11 @@ gemma3:1b`) to get real answers.
 > **Offline scores.** In offline mode the printed `sim` numbers reflect
 > word-overlap, not meaning — don't read into their magnitude (an unanswerable
 > question can even show a high score). Install the real embedder for meaningful
-> similarity scores. Try editing the questions at the bottom of the
-file — including one whose answer is *not* in the docs, to see whether the system
-correctly says "I don't know" (a preview of Lesson 6's honesty problem).
+> similarity scores.
+
+Try editing the questions at the bottom of the file — including one whose answer
+is *not* in the docs, to see whether the system correctly says "I don't know" (a
+preview of Lesson 6's honesty problem).
 
 ## 6. What can go wrong (and which lesson fixes it)
 

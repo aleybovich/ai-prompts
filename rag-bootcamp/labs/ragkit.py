@@ -61,8 +61,10 @@ def _l2_normalize(mat: np.ndarray) -> np.ndarray:
 
 class FastEmbedEmbedder:
     """
-    Real semantic embeddings via `fastembed` (Qdrant). Preferred default because
-    it uses ONNX (no PyTorch), so it installs small and runs fast on a laptop.
+    Real semantic embeddings via `fastembed` (Qdrant) — a lighter, torch-free
+    ALTERNATIVE to sentence-transformers. get_embedder() prefers
+    sentence-transformers (the industry standard) and falls back to this when it
+    is the only one installed. Uses ONNX, so it installs small and runs fast.
     """
 
     def __init__(self, model_name: str = DEFAULT_EMBED_MODEL):

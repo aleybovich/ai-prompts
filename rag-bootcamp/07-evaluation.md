@@ -55,6 +55,11 @@ metrics (all reported as an average over your eval set):
 | **MRR** | How high was the *first* relevant doc? | 1 / (rank of first relevant) |
 | **NDCG @k** | Are the most relevant docs ranked highest? | position-discounted, normalized to ideal |
 
+> Note: this **recall@k** — did retrieval fetch the *right documents* for a
+> question — is a different measurement from the *index* recall@k in Lesson 3,
+> which asked whether the ANN index returned the true nearest vectors. Same name,
+> different question.
+
 For most RAG work, **recall@k** and **MRR** are the two to watch: recall tells you
 whether the evidence is present at all, MRR tells you whether it is near the top
 where the model will actually use it.

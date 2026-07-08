@@ -14,6 +14,7 @@ We measure size in CHARACTERS to avoid a tokenizer dependency. Rule of thumb:
 1 token ~= 4 characters of English, so ~1800 chars ~= ~450 tokens.
 """
 
+import os
 import re
 
 import ragkit
@@ -158,6 +159,25 @@ def main():
     print(f"    {preview(chunk_texts[ci], 120)!r}")
     print("\n  The chunk hands the LLM a short, on-target passage instead of a")
     print("  whole document — cheaper to send and easier to answer from.")
+
+    # --- Loading a REAL PDF with pypdf, then chunking it -------------------
+    print("\n" + "-" * 62)
+    print("Loading text out of a real PDF (pypdf), then chunking it\n")
+    pdf_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "sample.pdf")
+    try:
+        from pypdf import PdfReader
+
+        reader = PdfReader(pdf_path)
+        pdf_text = "\n".join(page.extract_text() for page in reader.pages)
+        print(f"  Extracted {len(pdf_text)} chars from {len(reader.pages)} page(s) of sample.pdf")
+        print(f"  preview: {preview(pdf_text, 90)!r}")
+        pdf_chunks = recursive_chunks(pdf_text, size=400, overlap=60)
+        print(f"  -> split into {len(pdf_chunks)} chunk(s); chunk 0: {preview(pdf_chunks[0], 70)!r}")
+        print("  Real documents (PDF, docx, html) become text FIRST, then chunk the")
+        print("  same way. Always eyeball the extracted text before trusting it —")
+        print("  bad parsing poisons everything downstream.")
+    except ImportError:
+        print("  (install pypdf — it is in requirements.txt — to run this part)")
 
 
 if __name__ == "__main__":

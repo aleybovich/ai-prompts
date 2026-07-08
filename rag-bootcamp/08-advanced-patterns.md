@@ -122,8 +122,8 @@ underneath (this whole course) do not.
 the corpus — **plain chunks** and **context-prepended chunks** — and compares
 retrieval quality on the evaluation set from Lesson 7 (recall@k, MRR). It writes
 each chunk's context blurb with your local LLM if one is available, and falls
-back to a deterministic template (document title + section) otherwise, so it runs
-and measures either way.
+back to a deterministic template (document title + source filename) otherwise, so
+it runs and measures either way.
 
 > **Offline note.** With the lexical stand-in and the fixed title template, the
 > measured delta on this tiny corpus can be zero or even slightly *negative* — a

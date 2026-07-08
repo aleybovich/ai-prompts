@@ -90,6 +90,16 @@ Sometimes the problem is the query, not the index. Rewrite it *before* retrieval
 These cost an extra LLM call or two, so reach for them when evaluation (Lesson 7)
 shows retrieval — not generation — is the bottleneck.
 
+> **Multi-turn (chat) RAG — the most common real case.** Most RAG ships as a
+> chatbot, where the user's message depends on the conversation: "What about the
+> Team plan?" or "How much is that?" You **cannot embed that directly** — "that"
+> and "it" mean nothing to the retriever. The standard fix is **query
+> condensation**: before retrieving, make one cheap LLM call that rewrites the
+> latest message *plus the recent history* into a **standalone question** ("How
+> much does the Team plan cost per user?"), then run your normal retrieval on the
+> rewritten query. This one step is what makes conversational RAG actually work —
+> add it whenever your system has a back-and-forth interface.
+
 ## 5. MMR: relevant *and* diverse
 
 If your top results are five near-duplicate chunks, the LLM sees one fact five

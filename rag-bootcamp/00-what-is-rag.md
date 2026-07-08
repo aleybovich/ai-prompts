@@ -78,7 +78,7 @@ python lab00_hallucination.py
 
 Even with **no LLM installed**, the lab runs: it prints the exact prompt each
 approach would send, so you can *see* that RAG's prompt contains the real answer
-(the "$8/month" passage) while the plain prompt does not. Install Ollama (see
+(the "8 USD per month" passage) while the plain prompt does not. Install Ollama (see
 `labs/README.md`) to watch a real model get it wrong, then right.
 
 > **Offline note.** Without the embedding model installed (or with
