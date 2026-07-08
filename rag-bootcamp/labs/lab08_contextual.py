@@ -11,6 +11,10 @@ deterministic template (document title + source) is used so the lab still runs
 and measures. Either way you see the mechanic: adding document context to a chunk
 changes what it matches.
 
+This lab implements the Contextual *Embeddings* half. In a full system you would
+also build Contextual *BM25* over the same text and stack hybrid + rerank
+(Lesson 5) on top — Anthropic reports the biggest gains from all of them combined.
+
 Run it:   python lab08_contextual.py
 (With a real LLM this makes one short call per chunk — a bit slower, but that is
 exactly what Contextual Retrieval does at ingestion time.)
@@ -29,6 +33,7 @@ with open(os.path.join(HERE, "data", "eval.json")) as f:
     eval_set = json.load(f)
 
 chunks = ragkit.chunk_corpus()
+doc_text = {d["id"]: d["text"] for d in ragkit.load_corpus()}   # parent document by source
 embedder = ragkit.get_embedder()
 llm = ragkit.get_llm()
 
@@ -39,13 +44,20 @@ CTX_SYSTEM = (
 
 
 def make_context(chunk):
-    """One-sentence context for a chunk. LLM if available, else a template."""
+    """
+    One-sentence context for a chunk. Following Anthropic's technique, we give
+    the LLM the WHOLE parent document plus the chunk, so it can add context the
+    chunk itself doesn't contain (e.g. that '8 USD' refers to the *Pro* plan).
+    Falls back to a deterministic title template with no LLM.
+    """
     if llm.name != "mock":
+        parent = doc_text.get(chunk["source"], "")[:2500]
         prompt = (
-            f"Document: {chunk['title']} ({chunk['source']})\n"
-            f"Passage:\n{chunk['text'][:600]}\n\n"
-            "Write one short sentence giving the context of this passage within "
-            "the document (what it is about), to help a search engine find it."
+            f"<document>\n{parent}\n</document>\n\n"
+            f"<chunk>\n{chunk['text']}\n</chunk>\n\n"
+            "Write one short sentence situating this chunk within the whole "
+            "document (what it is about, which entity/section it belongs to), "
+            "to help a search engine find it."
         )
         try:
             return llm.generate(prompt, system=CTX_SYSTEM).strip().replace("\n", " ")
