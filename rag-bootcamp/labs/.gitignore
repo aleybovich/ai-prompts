@@ -1,0 +1,7 @@
+# Python virtual environment
+.venv/
+# Chroma persistent store created by lab03/lab04/lab09
+chroma_db/
+# Python caches
+__pycache__/
+*.pyc

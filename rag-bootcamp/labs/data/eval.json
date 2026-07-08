@@ -1,0 +1,86 @@
+[
+  {
+    "id": "q1",
+    "question": "How much does the Pro plan cost per month?",
+    "answer": "The Pro plan costs 8 USD per month billed monthly, or 80 USD per year (about 6.67 USD/month) if paid annually.",
+    "relevant_docs": ["pricing.md"],
+    "must_include": ["8"]
+  },
+  {
+    "id": "q2",
+    "question": "Can I use Nimbus Notes without an internet connection?",
+    "answer": "Yes. Nimbus works fully offline: you can read, create, edit, and delete notes offline, and changes sync automatically the next time you are online.",
+    "relevant_docs": ["sync-and-offline.md"],
+    "must_include": ["offline"]
+  },
+  {
+    "id": "q3",
+    "question": "What happens if I forget the passphrase for an end-to-end encrypted notebook?",
+    "answer": "The notes cannot be recovered. End-to-end encrypted notebooks have no passphrase reset, and not even Nimbus support can recover them.",
+    "relevant_docs": ["security.md", "troubleshooting.md"],
+    "must_include": ["cannot"]
+  },
+  {
+    "id": "q4",
+    "question": "What does API error 429 mean and what should I do about it?",
+    "answer": "429 Too Many Requests means you exceeded the API rate limit (120 requests/minute on Pro, 600 on Team). Read the Retry-After header and wait that many seconds before retrying.",
+    "relevant_docs": ["api.md", "troubleshooting.md"],
+    "must_include": ["Retry-After"]
+  },
+  {
+    "id": "q5",
+    "question": "How many devices can I sync on the Free plan?",
+    "answer": "The Free plan syncs up to 3 devices at once.",
+    "relevant_docs": ["pricing.md"],
+    "must_include": ["3"]
+  },
+  {
+    "id": "q6",
+    "question": "Which plan do I need for single sign-on (SSO)?",
+    "answer": "Single sign-on (SSO) with SAML is available on the Team plan.",
+    "relevant_docs": ["security.md", "pricing.md"],
+    "must_include": ["Team"]
+  },
+  {
+    "id": "q7",
+    "question": "What is the maximum size for a single attachment?",
+    "answer": "Attachments must be 200 MB or smaller per file.",
+    "relevant_docs": ["troubleshooting.md", "sync-and-offline.md"],
+    "must_include": ["200"]
+  },
+  {
+    "id": "q8",
+    "question": "How can I share a note with someone who does not have a Nimbus account?",
+    "answer": "Create a read-only public link from the note's Share menu. Anyone can open it in a browser without a Nimbus account, and you can set an expiration date or turn it off.",
+    "relevant_docs": ["sharing-and-collaboration.md"],
+    "must_include": ["public link"]
+  },
+  {
+    "id": "q9",
+    "question": "What formats can I export my notes to?",
+    "answer": "You can export to Markdown, PDF, HTML, and JSON.",
+    "relevant_docs": ["import-export.md"],
+    "must_include": ["Markdown"]
+  },
+  {
+    "id": "q10",
+    "question": "When was per-notebook end-to-end encryption added to Nimbus?",
+    "answer": "End-to-end encryption per notebook was added in version 5.2 in March 2026.",
+    "relevant_docs": ["changelog.md"],
+    "must_include": ["5.2"]
+  },
+  {
+    "id": "q11",
+    "question": "What are the permission levels when sharing a notebook?",
+    "answer": "The three notebook permission levels are Viewer, Commenter, and Editor.",
+    "relevant_docs": ["sharing-and-collaboration.md"],
+    "must_include": ["Editor"]
+  },
+  {
+    "id": "q12",
+    "question": "Does the Free plan include access to the Nimbus API?",
+    "answer": "No. The API is available only on Pro and Team plans; the Free plan does not include API access.",
+    "relevant_docs": ["api.md"],
+    "must_include": ["Pro"]
+  }
+]

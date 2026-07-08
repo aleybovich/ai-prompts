@@ -1,0 +1,20 @@
+# RAG Bootcamp — lab dependencies.
+# Everything here is FREE and runs locally on a normal laptop.
+# Install into a virtual environment (see labs/README.md). Do NOT install as root.
+
+numpy                 # vectors and math
+sentence-transformers # embeddings + cross-encoder reranker (the industry standard; uses PyTorch)
+chromadb              # embedded vector database
+rank_bm25             # keyword (BM25) retrieval
+pypdf                 # extract text from PDFs (ingestion lab)
+
+# ---------------------------------------------------------------------------
+# Optional — NOT required for any lab. Uncomment only if you want them.
+# ---------------------------------------------------------------------------
+# fastembed               # lighter, torch-free embeddings/reranker (if you are tight on disk)
+# anthropic               # generate answers with Claude (needs a paid API key)
+# ragas                   # ready-made RAG evaluation metrics (Lesson 7 shows the math by hand)
+# deepeval                # another evaluation framework
+# langchain langchain-anthropic   # orchestration framework (Lesson 8 discusses when to adopt one)
+# llama-index                     # data/RAG framework
+# docling                         # high-quality PDF/table parsing for messy documents
