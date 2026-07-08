@@ -16,8 +16,10 @@ RAG prompts are big — you stuff several chunks into every call. Two levers:
 - **Prompt caching.** If part of your prompt is stable across requests (a fixed
   system prompt, a set of few-shot examples, or a document set queried
   repeatedly), the model provider can cache its processing of that prefix. Cache
-  **reads cost roughly a tenth** of normal input tokens. Put stable content first
-  and the varying question last, so the long prefix stays cache-eligible. This is
+  **reads cost roughly a tenth** of normal input tokens (a cache *write* costs a
+  small premium, so caching pays off only when the same prefix is reused). Put
+  stable content first and the varying question last, so the long prefix stays
+  cache-eligible. This is
   also what makes **contextual retrieval** (Lesson 8) affordable — the document is
   cached once while you generate a blurb per chunk.
 - **Right-size the model.** Use a small, cheap model for easy queries and
@@ -45,10 +47,12 @@ Documents change. Two rules keep the index correct:
   (e.g. `docid#position`). On update, compute a hash of the chunk text; if it
   changed, **upsert** the new version; delete chunks that no longer exist. Never
   rebuild the whole index for a one-document edit.
-- **The index's identity = embedding model + chunking strategy.** If you change
-  either, every vector is now in a different (incomparable) space or a different
-  shape — you must **re-embed the entire corpus**. Version your index with the
-  model name and chunking config so you know when a full reindex is required.
+- **The index's identity = embedding model + chunking strategy.** Change the
+  embedding model and every vector lives in a different, incomparable space;
+  change the chunking and the old vectors no longer correspond to the right text
+  spans. Either way you must **re-embed the entire corpus**. Version your index
+  with the model name and chunking config so you know when a full reindex is
+  required.
 
 ## 4. Security: prompt injection through retrieved documents
 

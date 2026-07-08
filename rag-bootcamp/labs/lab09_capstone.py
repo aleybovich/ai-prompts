@@ -77,28 +77,40 @@ class RagService:
             c.setdefault("visibility", "public")
             c["hash"] = sha(c["text"])
         self.chunks = chunks
-        self._reindex()
+        self.vecs = self.embedder.encode([c["text"] for c in self.chunks])  # embed all, ONCE
+        self._id2idx = {c["id"]: i for i, c in enumerate(self.chunks)}
+        self._build_bm25()
 
-    def _reindex(self):
-        self.vecs = self.embedder.encode([c["text"] for c in self.chunks])
+    def _build_bm25(self):
+        # rank_bm25 has no partial update, so we rebuild the sparse index; a
+        # production sparse store (Elasticsearch, Qdrant, ...) upserts one row.
         self.bm25 = BM25Okapi([re.findall(r"[a-z0-9_]+", c["text"].lower()) for c in self.chunks])
 
     def upsert(self, chunk_id, new_text):
-        """Incremental update by content hash: only re-embed if the text changed."""
+        """
+        Incremental update by content HASH. If the text changed, re-embed ONLY
+        that one chunk (not the whole corpus) and update its row in place -- this
+        is what a real vector DB does. Deletes would tombstone the row similarly.
+        """
         new_hash = sha(new_text)
-        for c in self.chunks:
-            if c["id"] == chunk_id:
-                if c["hash"] == new_hash:
-                    print(f"  upsert {chunk_id}: unchanged (same hash) -> skip re-embed")
-                    return
-                c["text"], c["hash"] = new_text, new_hash
-                self._reindex()
-                print(f"  upsert {chunk_id}: content changed -> re-embedded")
+        if chunk_id in self._id2idx:
+            idx = self._id2idx[chunk_id]
+            c = self.chunks[idx]
+            if c["hash"] == new_hash:
+                print(f"  upsert {chunk_id}: unchanged (same hash) -> skip re-embed")
                 return
-        # new chunk
-        self.chunks.append({"id": chunk_id, "source": chunk_id.split("#")[0],
-                            "text": new_text, "visibility": "public", "hash": new_hash})
-        self._reindex()
+            c["text"], c["hash"] = new_text, new_hash
+            self.vecs[idx] = self.embedder.encode([new_text])[0]   # re-embed 1 chunk
+            self._build_bm25()
+            print(f"  upsert {chunk_id}: content changed -> re-embedded 1 chunk (BM25 rebuilt)")
+            return
+        # new chunk: append one row
+        new_c = {"id": chunk_id, "source": chunk_id.split("#")[0],
+                 "text": new_text, "visibility": "public", "hash": new_hash}
+        self.chunks.append(new_c)
+        self.vecs = np.vstack([self.vecs, self.embedder.encode([new_text])])
+        self._id2idx[chunk_id] = len(self.chunks) - 1
+        self._build_bm25()
         print(f"  upsert {chunk_id}: inserted new chunk")
 
     # ---- retrieval -------------------------------------------------------
@@ -159,8 +171,12 @@ pricing_id = next(c["id"] for c in svc.chunks if c["source"] == "pricing.md")
 old_text = next(c["text"] for c in svc.chunks if c["id"] == pricing_id)
 svc.upsert(pricing_id, old_text)                                   # same text -> skip
 svc.upsert(pricing_id, "The Pro plan now costs 10 USD per month as of 2026.")  # changed
-r = svc.answer("What is the current Pro plan price?")
-print("   after update, top source:", r["sources"][0] if r["sources"] else None)
+# Verify the change took effect (works offline, no LLM needed): the new text
+# is now retrievable for a pricing query.
+idxs = svc.retrieve("How much does the Pro plan cost now?")
+ctx = " ".join(svc.chunks[i]["text"] for i in idxs)
+print("   updated text ('10 USD') now in retrieved context?", "10 USD" in ctx)
+print("   (With a real LLM the generated answer reflects the new price too.)")
 
 # --- 3. Access control at retrieval ---------------------------------------
 print("\n" + "=" * 68)

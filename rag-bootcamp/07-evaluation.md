@@ -111,17 +111,21 @@ to fix. Always read the failures.
 [`labs/lab07_eval.py`](./labs/lab07_eval.py) loads the evaluation set, runs
 retrieval for every question, and computes **hit@k, recall@k, precision@k, and
 MRR** — implemented from scratch so the formulas are concrete. It reports metrics
-for **dense** vs **hybrid** retrieval so you can see, in numbers, the improvement
-Lesson 5 promised. It also runs the cheap **key-fact** answer check.
+for **dense** vs **hybrid** retrieval, prints the individual **misses**, checks
+**evidence coverage** (did the required fact reach the context at all?), and, with
+a real LLM, runs a **key-fact** answer check.
 
 ```bash
 cd labs && source .venv/bin/activate
 python lab07_eval.py
 ```
 
-Offline (lexical) the absolute numbers are low; install the real embedding model
-to see them jump — and to see hybrid beat dense. The point of the lab is the
-*measurement machinery*, which is identical either way.
+Even offline (with the lexical stand-in), **hybrid beats dense** in the numbers —
+higher hit rate and MRR — so you observe Lesson 5's promise directly, no download
+required. Installing the real embedding model raises the absolute quality further.
+The lab uses **k=3** because the demo corpus is tiny (with 10 docs, k=5 returns
+half of them and every metric saturates). The *measurement machinery* is the point
+and is identical either way.
 
 ## Key takeaways
 
